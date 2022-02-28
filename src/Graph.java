@@ -1,15 +1,14 @@
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
+import java.util.TreeSet;
 
 /**
- * 邻接矩阵，只处理简单图。
+ * 邻接表(TreeSet)，只处理简单图。
  *
  * @author Chanmoey
  */
-public class AdjMatrix {
+public class Graph {
 
     /**
      * V 表示图中顶点的个数。
@@ -18,7 +17,14 @@ public class AdjMatrix {
      */
     private int V;
     private int E;
-    private int[][] adj;
+
+    /**
+     * 红黑树 与 HashSet 对比：
+     * HashSet 查重比红黑树的性能要好。 O(1) 和 O(logV) 的区别。
+     * 红黑树可以保证每次遍历某一节点的边时，顺序是不变的。
+     * 红黑树相比HashSet更加节省空间。
+     */
+    private TreeSet<Integer>[] adj;
 
     public int getV() {
         return V;
@@ -35,7 +41,7 @@ public class AdjMatrix {
      * ...
      * nodeX nodeY
      */
-    public AdjMatrix(String filename) {
+    public Graph(String filename) {
 
         File file = new File(filename);
 
@@ -45,7 +51,10 @@ public class AdjMatrix {
                 throw new IllegalArgumentException("V must be non-negative");
             }
 
-            this.adj = new int[V][V];
+            this.adj = new TreeSet[V];
+            for (int i = 0; i < this.V; i++) {
+                this.adj[i] = new TreeSet<>();
+            }
 
             this.E = scanner.nextInt();
             if (this.E < 0) {
@@ -53,19 +62,19 @@ public class AdjMatrix {
             }
 
             for (int i = 0; i < this.E; i++) {
-                int idx1 = scanner.nextInt();
-                this.validateVertex(idx1);
-                int idx2 = scanner.nextInt();
-                this.validateVertex(idx1);
-                if (idx1 == idx2) {
+                int node1 = scanner.nextInt();
+                this.validateVertex(node1);
+                int node2 = scanner.nextInt();
+                this.validateVertex(node1);
+                if (node1 == node2) {
                     throw new IllegalArgumentException("Self Loop is Detected!");
                 }
-                if (this.adj[idx1][idx2] == 1) {
+                if (this.adj[node1].contains(node2)) {
                     throw new IllegalArgumentException("Parallel Edges are Detected");
                 }
 
-                this.adj[idx1][idx2] = 1;
-                this.adj[idx2][idx1] = 1;
+                this.adj[node1].add(node2);
+                this.adj[node2].add(node1);
             }
 
         } catch (IOException e) {
@@ -82,43 +91,36 @@ public class AdjMatrix {
     public boolean hasEdge(int v, int w) {
         this.validateVertex(v);
         this.validateVertex(w);
-        return this.adj[v][w] == 1;
+        return this.adj[v].contains(w);
     }
 
-    public List<Integer> adj(int v) {
-
+    public Iterable<Integer> adj(int v) {
         this.validateVertex(v);
-
-        List<Integer> res = new ArrayList<>();
-        for (int i = 0; i < this.V; i++) {
-            if (this.adj[v][i] == 1) {
-                res.add(i);
-            }
-        }
-
-        return res;
+        return this.adj[v];
     }
 
     public int degree(int v) {
-        return this.adj(v).size();
+        this.validateVertex(v);
+        return this.adj[v].size();
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("V = %d, E = %d\n", this.V, this.E));
-        for (int[] row : this.adj) {
-            for (int edge : row) {
-                sb.append(String.format("%d ", edge));
+        for (int v = 0; v < this.V; v++) {
+            sb.append(String.format("%d: ", v));
+            for (int w : this.adj[v]) {
+                sb.append(String.format("%d ", w));
             }
-            sb.append('\n');
+            sb.append("\n");
         }
 
         return sb.toString();
     }
 
     public static void main(String[] args) {
-        AdjMatrix adjMatrix = new AdjMatrix("g.txt");
-        System.out.println(adjMatrix);
+        Graph graph = new Graph("g.txt");
+        System.out.println(graph);
     }
 }

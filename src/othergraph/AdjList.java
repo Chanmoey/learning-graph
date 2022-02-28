@@ -1,10 +1,12 @@
+package othergraph;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 /**
- * 邻接矩阵，只处理简单图。
+ * 邻接表，只处理简单图。
  *
  * @author Chanmoey
  */
