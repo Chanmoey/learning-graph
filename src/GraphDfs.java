@@ -13,7 +13,11 @@ public class GraphDfs {
     public GraphDfs(Graph graph) {
         this.graph = graph;
         this.visited = new boolean[graph.getV()];
-        this.dfs(0);
+        for (int v = 0; v < graph.getV(); v++) {
+            if (!this.visited[v]) {
+                this.dfs(v);
+            }
+        }
     }
 
     private void dfs(int v) {
