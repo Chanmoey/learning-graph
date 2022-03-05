@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * @author Chanmoey
@@ -13,14 +14,14 @@ public class FindCutPoints {
     private int[] low;
     private int cnt;
 
-    private ArrayList<Edge> res;
+    private HashSet<Integer> res;
 
     public FindCutPoints(Graph graph) {
 
         this.graph = graph;
         visited = new boolean[graph.getV()];
 
-        res = new ArrayList<>();
+        res = new HashSet<>();
         ord = new int[graph.getV()];
         low = new int[graph.getV()];
         cnt = 0;
@@ -39,12 +40,20 @@ public class FindCutPoints {
         low[v] = ord[v];
         cnt++;
 
+        int child = 0;
         for (int w : this.graph.adj(v)) {
             if (!visited[w]) {
                 dfs(w, v);
                 low[v] = Math.min(low[v], low[w]);
-                if (low[w] > ord[v]) {
-                    res.add(new Edge(v, w));
+
+                if (v != parent && low[w] >= ord[v]) {
+                    res.add(v);
+                }
+
+                // 根节点特殊处理
+                child++;
+                if (v == parent && child > 1) {
+                    res.add(v);
                 }
             } else if (w != parent) {
                 low[v] = Math.min(low[v], low[w]);
@@ -52,13 +61,13 @@ public class FindCutPoints {
         }
     }
 
-    public ArrayList<Edge> result(){
+    public HashSet<Integer> result() {
         return res;
     }
 
     public static void main(String[] args) {
         Graph graph = new Graph("g_bridge.txt");
-        FindBridges findBridges = new FindBridges(graph);
-        System.out.println(findBridges.result());
+        FindCutPoints fcp = new FindCutPoints(graph);
+        System.out.println(fcp.result());
     }
 }
