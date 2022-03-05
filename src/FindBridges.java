@@ -55,4 +55,10 @@ public class FindBridges {
     public ArrayList<Edge> result(){
         return res;
     }
+
+    public static void main(String[] args) {
+        Graph graph = new Graph("g_bridge.txt");
+        FindBridges findBridges = new FindBridges(graph);
+        System.out.println(findBridges.result());
+    }
 }
