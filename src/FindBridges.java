@@ -9,8 +9,8 @@ public class FindBridges {
     private Graph graph;
     private boolean[] visited;
 
-    private int ord[];
-    private int low[];
+    private int[] ord;
+    private int[] low;
     private int cnt;
 
     private ArrayList<Edge> res;
