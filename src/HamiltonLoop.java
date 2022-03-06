@@ -18,37 +18,29 @@ public class HamiltonLoop {
         this.visited = new boolean[graph.getV()];
         this.pre = new int[graph.getV()];
         this.end = -1;
-        this.dfs(0, 0);
+        this.dfs(0, 0, graph.getV());
     }
 
-    private boolean dfs(int v, int parent) {
+    private boolean dfs(int v, int parent, int left) {
         this.visited[v] = true;
         this.pre[v] = parent;
+        left--;
+        if (left == 0 && this.graph.hasEdge(v, 0)) {
+            this.end = v;
+            return true;
+        }
 
         for (int w : this.graph.adj(v)) {
             if (!this.visited[w]) {
-                if (dfs(w, v)) {
+                if (dfs(w, v, left)) {
                     return true;
                 }
-            } else if (w == 0 && allVisited()) {
-                this.end = v;
-                return true;
-            }
-        }
-        
-        this.visited[v] = false;
-        
-        return false;
-    }
-    
-    private boolean allVisited() {
-        for (boolean b : this.visited) {
-            if (!b) {
-                return false;
             }
         }
 
-        return true;
+        this.visited[v] = false;
+
+        return false;
     }
 
     public ArrayList<Integer> path() {
