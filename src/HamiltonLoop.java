@@ -8,20 +8,20 @@ import java.util.Collections;
 public class HamiltonLoop {
 
     private Graph graph;
-    private boolean[] visited;
     private int[] pre;
     private int end;
 
     public HamiltonLoop(Graph graph) {
         this.graph = graph;
-        this.visited = new boolean[graph.getV()];
         this.pre = new int[graph.getV()];
         this.end = -1;
-        this.dfs(0, 0, graph.getV());
+
+        int visited = 0;
+        this.dfs(visited,0, 0, graph.getV());
     }
 
-    private boolean dfs(int v, int parent, int left) {
-        this.visited[v] = true;
+    private boolean dfs(int visited, int v, int parent, int left) {
+        visited += (1 << v);
         this.pre[v] = parent;
         left--;
         if (left == 0 && this.graph.hasEdge(v, 0)) {
@@ -30,14 +30,12 @@ public class HamiltonLoop {
         }
 
         for (int w : this.graph.adj(v)) {
-            if (!this.visited[w]) {
-                if (dfs(w, v, left)) {
+            if ((visited & (1 << w)) == 0) {
+                if (dfs(visited, w, v, left)) {
                     return true;
                 }
             }
         }
-
-        this.visited[v] = false;
 
         return false;
     }
