@@ -8,7 +8,7 @@ import java.util.TreeSet;
  *
  * @author Chanmoey
  */
-public class Graph {
+public class Graph implements Cloneable {
 
     /**
      * V 表示图中顶点的个数。
@@ -130,5 +130,24 @@ public class Graph {
     public static void main(String[] args) {
         Graph graph = new Graph("g.txt");
         System.out.println(graph);
+    }
+
+    @Override
+    public Graph clone() {
+        try {
+            Graph clone = (Graph) super.clone();
+            clone.adj = new TreeSet[this.V];
+            for (int v = 0; v < this.V; v++) {
+                clone.adj[v] = new TreeSet<>();
+                for (int w : this.adj[v]) {
+                    clone.adj[v].add(w);
+                }
+            }
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
