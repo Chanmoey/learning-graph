@@ -33,7 +33,6 @@ public class CC {
     }
 
     public int count() {
-        System.out.println(Arrays.toString(this.visited));
         return this.cccount;
     }
 
