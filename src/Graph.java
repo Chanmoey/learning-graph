@@ -104,6 +104,14 @@ public class Graph {
         return this.adj[v].size();
     }
 
+    public void removeEdge(int v, int w) {
+        this.validateVertex(v);
+        this.validateVertex(w);
+
+        this.adj[v].remove(w);
+        this.adj[w].remove(v);
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
