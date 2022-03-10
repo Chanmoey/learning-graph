@@ -4,7 +4,17 @@
  */
 public class WeightedEdge implements Comparable<WeightedEdge>{
 
-    private int v, w, weight;
+    private int v;
+    private int w;
+    private int weight;
+
+    public int getV() {
+        return v;
+    }
+
+    public int getW() {
+        return w;
+    }
 
     public WeightedEdge(int v, int w, int weight) {
         this.v = v;
