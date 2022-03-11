@@ -2,7 +2,7 @@
  * @author Chanmoey
  * @date 2022年03月10日
  */
-public class WeightedEdge implements Comparable<WeightedEdge>{
+public class WeightedEdge implements Comparable<WeightedEdge> {
 
     private int v;
     private int w;
@@ -14,6 +14,11 @@ public class WeightedEdge implements Comparable<WeightedEdge>{
 
     public int getW() {
         return w;
+    }
+
+
+    public int getWeight() {
+        return weight;
     }
 
     public WeightedEdge(int v, int w, int weight) {
